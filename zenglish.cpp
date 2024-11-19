@@ -17,25 +17,40 @@ struct Graph{
     void AddEdge(int u,int v){
         adj_matrix[u][v]=1;
         Verteces[u].OutDegree++;
+        Verteces[u].Neighbors.push_back(&Verteces[v]);
         Verteces[v].InDegree++;
         
     }
 };
 
 struct Vertex{
-    int ID;
-    int InDegree;
-    int OutDegree;
-    vector<Vertex*> Out;
+    bool visited = false;
+    bool complete = false;
+    int ID=0;
+    int InDegree=0;
+    int OutDegree=0;
+    vector<Vertex*> Neighbors;
 };
+
 int main(){
     int n;
     int nEdges;
     cin>>n;
     cin>>nEdges;
-    Vertex* Verteces = new Vertex[n];
+    Graph* g = new Graph(n);//Creating the graph as a struct
+
     for(int i=0;i<n;i++){
-        Verteces[i].ID=i;
+        g->Verteces[i].ID=i;//Giving the verteces their IDs in order.
     }
+
+    int u=0;
+    int v=0;
+
+    for(int i=0;i<nEdges;i++){//Assigning all of the edges
+        cin>>u;
+        cin>>v;
+        g->AddEdge(u,v);
+    }//At this point the graph is now fully set up.
+
     return 1;
 }
