@@ -10,21 +10,21 @@ struct Node {
     vector <int> adj;
     vector <int> rev_adj;
 };
-/*
+
 Node g[MAX_N];
 stack <int> S;
 bool visited[MAX_N];
 int component[MAX_N];
 vector <int> components[MAX_N];
 int numComponents;
-*/
+/*
 Node* g;
 stack <int> S;
 bool* visited;
 int* component;
 vector<int>* components;
 int numComponents;
-
+*/
 void dfs_1(int x) {
     visited[x] = true;
     for (int i = 0; i < g[x].adj.size(); i++) {
@@ -68,10 +68,10 @@ void Kosaraju() {
 
 int main() {
     cin >> n >> m;
-    g = new Node[n+1];
+/*    g = new Node[n+1];
     visited = new bool[n+1];
-    component = new int[n];
-    components = new vector<int>[n];
+    component = new int[n+1];
+    components = new vector<int>[n+1];*/
     int a, b;
     for(int i=0;i<m;i++){
         cin >> a >> b;

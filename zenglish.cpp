@@ -2,19 +2,31 @@
 #include<vector>
 #include<stack>
 
+//#include<bits/stdc++.h>
+
+#define MAX_N 20001
+
 using namespace std;
 
 struct Node {
     vector<int> Adjacent;
     vector<int> ReverseAdjacent;
 };
+/*
+Node* g;
+stack<int> S;
+bool* visited;
+int* component;
+vector<int>* components;
+int numComponents;
+*/
 
-    Node* g;
-    stack<int> S;
-    bool* visited;
-    int* component;
-    vector<int>* components;
-    int numComponents;
+Node g[MAX_N];
+stack <int> S;
+bool visited[MAX_N];
+int component[MAX_N];
+vector <int> components[MAX_N];
+int numComponents;
 
 void dfs_1(int x){
     visited[x]=true;
@@ -66,10 +78,12 @@ int main(){
     cin>>n;
     cin>>m;
 
+/*
     g = new Node[n+1];
     visited = new bool[n+1];
-    component = new int[n+1];
-    components = new vector<int>[n+1];
+    component = new int[n];
+    components = new vector<int>[n];
+*/
 
     int u;
     int v;
@@ -86,11 +100,14 @@ int main(){
 
     for(int i=0;i<numComponents;i++){
         int min=components[i][0];
-        for(int j=1;j<components[i].size();j++){
+//        cout<<"Component "<<i<<": ";
+        for(int j=0;j<components[i].size();j++){
+//            cout<<components[i][j]<<" ";
             if(components[i][j]<min){
                 min=components[i][j];
             }
         }
+//        cout<<endl;
         for(int j=0;j<components[i].size();j++){
             ID[components[i][j]]=min;
         }
