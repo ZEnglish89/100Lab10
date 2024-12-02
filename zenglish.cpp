@@ -27,7 +27,7 @@ void dfs_1(int x){
 }
 
 void dfs_2(int x){
-    cout<<x<<" ";
+//    cout<<x<<" ";
     component[x] = numComponents;
     components[numComponents].push_back(x);
     visited[x]=true;
@@ -51,10 +51,10 @@ void Kosaraju(int n){
         int v = S.top();
         S.pop();
         if(!visited[v]){
-            cout<<"Component "<<numComponents<<": ";
+//            cout<<"Component "<<numComponents<<": ";
             dfs_2(v);
             numComponents++;
-            cout<<endl;
+//            cout<<endl;
         }
     }
 }
@@ -66,11 +66,10 @@ int main(){
     cin>>n;
     cin>>m;
 
-    g = new Node[n];
-    stack<int> S;
-    visited = new bool[n];
-    component = new int[n];
-    components = new vector<int>[n];
+    g = new Node[n+1];
+    visited = new bool[n+1];
+    component = new int[n+1];
+    components = new vector<int>[n+1];
 
     int u;
     int v;
@@ -86,8 +85,14 @@ int main(){
     int ID[n];
 
     for(int i=0;i<numComponents;i++){
+        int min=components[i][0];
+        for(int j=1;j<components[i].size();j++){
+            if(components[i][j]<min){
+                min=components[i][j];
+            }
+        }
         for(int j=0;j<components[i].size();j++){
-            ID[components[i][j]] = components[i][0];
+            ID[components[i][j]]=min;
         }
     }
     for(int i=0;i<n;i++){
