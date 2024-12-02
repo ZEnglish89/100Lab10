@@ -2,9 +2,7 @@
 #include<vector>
 #include<stack>
 
-//#include<bits/stdc++.h>
-
-#define MAX_N 20001
+#define MAX_N 20001//This was recommended to me online, when I had the issues with dynamic allocation(see line 81). It's an arbitrary value.
 
 using namespace std;
 
@@ -12,6 +10,7 @@ struct Node {
     vector<int> Adjacent;
     vector<int> ReverseAdjacent;
 };
+
 /*
 Node* g;
 stack<int> S;
@@ -24,28 +23,25 @@ int numComponents;
 Node g[MAX_N];
 stack <int> S;
 bool visited[MAX_N];
-int component[MAX_N];
 vector <int> components[MAX_N];
 int numComponents;
 
-void dfs_1(int x){
+void DFS(int x){
     visited[x]=true;
     for(int i=0;i<g[x].Adjacent.size();i++){
         if(!visited[g[x].Adjacent[i]]){
-            dfs_1(g[x].Adjacent[i]);
+            DFS(g[x].Adjacent[i]);
         }
     }
-    S.push(x);
+    S.push(x);//Stack it in order of endtime.
 }
 
-void dfs_2(int x){
-//    cout<<x<<" ";
-    component[x] = numComponents;
+void SpecialDFS(int x){
     components[numComponents].push_back(x);
     visited[x]=true;
     for(int i=0;i<g[x].ReverseAdjacent.size();i++){
         if(!visited[g[x].ReverseAdjacent[i]]){
-            dfs_2(g[x].ReverseAdjacent[i]);
+            SpecialDFS(g[x].ReverseAdjacent[i]);
         }
     }
 }
@@ -53,22 +49,20 @@ void dfs_2(int x){
 void Kosaraju(int n){
     for(int i=0;i<n;i++){
         if(!visited[i]){
-            dfs_1(i);
+            DFS(i);
         }
-    }
+    }//First round of searches, stacking up the elements.
     for(int i=0;i<n;i++){
         visited[i]=false;
-    }
+    }//resetting the bools to search again.
     while(!S.empty()){
         int v = S.top();
         S.pop();
         if(!visited[v]){
-//            cout<<"Component "<<numComponents<<": ";
-            dfs_2(v);
-            numComponents++;
-//            cout<<endl;
+            SpecialDFS(v);
+            numComponents++;//holding onto this because it's used in the second search.
         }
-    }
+    }//Second round of searches, in the order the elements were stacked.
 }
 
 int main(){
@@ -84,6 +78,9 @@ int main(){
     component = new int[n];
     components = new vector<int>[n];
 */
+//I really wanted to avoid having to use pre-allocated global variables, but seemingly no matter what I did it just wouldn't work.
+//The most interesting problem is that my dynamically-allocated version wasn't deterministic. It would sometimes be correct and
+//sometimes be incorrect, even if run back-to-back with the same inputs.
 
     int u;
     int v;
@@ -92,29 +89,26 @@ int main(){
         cin>>v;
         g[u].Adjacent.push_back(v);
         g[v].ReverseAdjacent.push_back(u);
-    }
+    }//Setting up the graph based on inputs.
 
     Kosaraju(n);
 
     int ID[n];
 
-    for(int i=0;i<numComponents;i++){
+    for(int i=0;i<numComponents;i++){//I'm assigning the IDs via something hashing-esque to avoid having to search components n times.
         int min=components[i][0];
-//        cout<<"Component "<<i<<": ";
         for(int j=0;j<components[i].size();j++){
-//            cout<<components[i][j]<<" ";
             if(components[i][j]<min){
-                min=components[i][j];
+                min=components[i][j];//Finding the minimum within each SCC, because they aren't automatically sorted.
             }
         }
-//        cout<<endl;
         for(int j=0;j<components[i].size();j++){
-            ID[components[i][j]]=min;
+            ID[components[i][j]]=min;//Assigning the ID for each element.
         }
     }
     for(int i=0;i<n;i++){
         cout<<ID[i]<<endl;
-    }
+    }//And print!
 
     return 1;
 }
